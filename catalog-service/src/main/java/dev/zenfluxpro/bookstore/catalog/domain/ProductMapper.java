@@ -8,8 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 class ProductMapper {
-    @NonNull
-    private final ModelMapper modelMapper;
+    @NonNull private final ModelMapper modelMapper;
 
     ProductDTO getProductDTO(ProductEntity productEntity) {
         return modelMapper.map(productEntity, ProductDTO.class);
@@ -38,5 +37,4 @@ class ProductMapper {
                 .price(productDto.getPrice())
                 .build();
     }
-
 }

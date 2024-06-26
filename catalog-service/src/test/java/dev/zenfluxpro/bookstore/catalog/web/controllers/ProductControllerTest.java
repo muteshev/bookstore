@@ -1,17 +1,16 @@
 package dev.zenfluxpro.bookstore.catalog.web.controllers;
 
-import dev.zenfluxpro.bookstore.catalog.BaseIntegrationTest;
-import dev.zenfluxpro.bookstore.catalog.domain.ProductDTO;
-import io.restassured.http.ContentType;
-import org.junit.jupiter.api.Test;
-import org.springframework.test.context.jdbc.Sql;
-
-import java.math.BigDecimal;
-
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+
+import dev.zenfluxpro.bookstore.catalog.BaseIntegrationTest;
+import dev.zenfluxpro.bookstore.catalog.domain.ProductDTO;
+import io.restassured.http.ContentType;
+import java.math.BigDecimal;
+import org.junit.jupiter.api.Test;
+import org.springframework.test.context.jdbc.Sql;
 
 @Sql("/test-data.sql")
 public class ProductControllerTest extends BaseIntegrationTest {
@@ -62,5 +61,4 @@ public class ProductControllerTest extends BaseIntegrationTest {
                 .body("title", is("Product Not Found"))
                 .body("detail", is("Product with code " + code + " not found"));
     }
-
 }
