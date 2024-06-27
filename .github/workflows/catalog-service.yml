@@ -26,9 +26,9 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: Verify with Maven
-        run: mvn -ntp verify
+        run: mvn -ntp verify -P remote
       - name: Build with Maven
-        run:  mvn -B package --file pom.xml
+        run:  mvn -B package -P remote --file pom.xml
 
 #      - if: ${{ github.ref == 'refs/head/main' }}
       - name: Login to Docker Hub
@@ -40,8 +40,8 @@ jobs:
 #      - if: ${{ github.ref == 'refs/head/main' }}
       - name: Build and Publish Docker Image
         run: |
-          mvn spring-boot:build-image -DskipTests
-          docker push muteshev/bookstore-catalog-service
+          mvn spring-boot:build-image -P remote -DskipTests
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/bookstore-catalog-service
 #          docker push ${{ secrets.DOCKER_USERNAME }}/bookstore-catalog-service
 
       # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
