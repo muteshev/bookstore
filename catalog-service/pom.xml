@@ -172,9 +172,11 @@
 						<host>//./pipe/dockerDesktopLinuxEngine</host>
 					</docker>
 -->
+<!--
 					<image>
 						<name>${dockerImageName}</name>
 					</image>
+-->
 				</configuration>
 				<executions>
 					<execution>
