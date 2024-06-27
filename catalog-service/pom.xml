@@ -167,12 +167,13 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
+<!--
 					<docker>
 						<host>//./pipe/dockerDesktopLinuxEngine</host>
 					</docker>
+-->
 					<image>
 						<name>${dockerImageName}</name>
-<!--						<name>catalog-service</name>-->
 					</image>
 				</configuration>
 				<executions>
