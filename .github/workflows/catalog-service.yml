@@ -41,7 +41,6 @@ jobs:
       - name: Build and Publish Docker Image
         run: |
           mvn spring-boot:build-image -DskipTests
-          echo "Pushing the image $DOCKER_IMAGE_NAME to Docker Hub..."
           docker push ${{ secrets.DOCKER_USERNAME }}/bookstore-catalog-service
 
       # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
