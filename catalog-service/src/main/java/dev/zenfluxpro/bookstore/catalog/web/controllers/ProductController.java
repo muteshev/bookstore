@@ -1,26 +1,37 @@
 package dev.zenfluxpro.bookstore.catalog.web.controllers;
 
-import dev.zenfluxpro.bookstore.catalog.domain.ProductDTO;
+import dev.zenfluxpro.bookstore.catalog.domain.PagedResult;
+import dev.zenfluxpro.bookstore.catalog.domain.Product;
 import dev.zenfluxpro.bookstore.catalog.domain.ProductNotFoundException;
-import dev.zenfluxpro.bookstore.catalog.domain.ProductPageResult;
 import dev.zenfluxpro.bookstore.catalog.domain.ProductService;
-import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1")
-@RequiredArgsConstructor
+@RequestMapping("/api/products")
 class ProductController {
+    private static final Logger log = LoggerFactory.getLogger(ProductController.class);
     private final ProductService productService;
 
-    @GetMapping("/products")
-    ProductPageResult<ProductDTO> getProducts(@RequestParam(name = "page", defaultValue = "1") int pageNo) {
+    ProductController(ProductService productService) {
+        this.productService = productService;
+    }
+
+    @GetMapping
+    PagedResult<Product> getProducts(@RequestParam(name = "page", defaultValue = "1") int pageNo) {
+        log.info("Fetching products for page: {}", pageNo);
         return productService.getProducts(pageNo);
     }
 
-    @GetMapping("/products/{code}")
-    ResponseEntity<ProductDTO> getProductByCode(@PathVariable String code) {
+    @GetMapping("/{code}")
+    ResponseEntity<Product> getProductByCode(@PathVariable String code) {
+        log.info("Fetching product for code: {}", code);
         return productService
                 .getProductByCode(code)
                 .map(ResponseEntity::ok)

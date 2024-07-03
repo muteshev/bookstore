@@ -10,14 +10,19 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.jdbc.Sql;
 
 @DataJpaTest(
-        properties = {"spring.test.database.replace=none", "spring.datasource.url=jdbc:tc:postgresql:16.2-alpine:///db"
+        properties = {
+            "spring.test.database.replace=none",
+            "spring.datasource.url=jdbc:tc:postgresql:16-alpine:///db",
         })
-// @Import(TestcontainersConfiguration.class)
+// @Import(ContainersConfig.class)
 @Sql("/test-data.sql")
 class ProductRepositoryTest {
+
     @Autowired
     private ProductRepository productRepository;
 
+    // You don't need to test the methods provided by Spring Data JPA.
+    // This test is to demonstrate how to write tests for the repository layer.
     @Test
     void shouldGetAllProducts() {
         List<ProductEntity> products = productRepository.findAll();

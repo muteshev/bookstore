@@ -3,10 +3,11 @@ version: '3'
 vars:
   GOOS: "{{default OS .GOOS}}"
   MVNW: "mvn"
+#  MVNW: '{{if eq .GOOS "windows"}}mvnw.cmd{{else}}./mvnw{{end}}'
   DC_DIR: "deployment/docker-compose"
   INFRA_DC_FILE: "{{.DC_DIR}}/infra.yml"
   APPS_DC_FILE: "{{.DC_DIR}}/apps.yml"
-#  MONITORING_DC_FILE: "{{.DC_DIR}}/monitoring.yml"
+  MONITORING_DC_FILE: "{{.DC_DIR}}/monitoring.yml"
   SLEEP_CMD: '{{if eq .GOOS "windows"}}timeout{{else}}sleep{{end}}'
 
 tasks:
@@ -24,27 +25,41 @@ tasks:
 
   build:
     cmds:
-      - "{{.MVNW}} verify -DskipTests"
       - "{{.MVNW}} -pl catalog-service spring-boot:build-image -DskipTests"
-#      - "{{.MVNW}} -pl order-service spring-boot:build-image -DskipTests"
-#      - "{{.MVNW}} -pl notification-service spring-boot:build-image -DskipTests"
-#      - "{{.MVNW}} -pl api-gateway spring-boot:build-image -DskipTests"
-#      - "{{.MVNW}} -pl bookstore-webapp spring-boot:build-image -DskipTests"
+      - "{{.MVNW}} -pl order-service spring-boot:build-image -DskipTests"
+      - "{{.MVNW}} -pl notification-service spring-boot:build-image -DskipTests"
+      - "{{.MVNW}} -pl api-gateway spring-boot:build-image -DskipTests"
+      - "{{.MVNW}} -pl bookstore-webapp spring-boot:build-image -DskipTests"
 
   start_infra:
     cmds:
       - "docker compose -f {{.INFRA_DC_FILE}} up -d"
+
+  start_apps:
+    cmds:
+      - "docker compose -f {{.APPS_DC_FILE}} up -d"
 
   stop_infra:
     cmds:
       - "docker compose -f {{.INFRA_DC_FILE}} stop"
       - "docker compose -f {{.INFRA_DC_FILE}} rm -f"
 
+  stop_apps:
+    cmds:
+      - "docker compose -f {{.APPS_DC_FILE}} stop"
+      - "docker compose -f {{.APPS_DC_FILE}} rm -f"
+
   restart_infra:
     cmds:
       - task: stop_infra
       - task: sleep
       - task: start_infra
+
+  restart_apps:
+    cmds:
+      - task: stop_apps
+      - task: sleep
+      - task: start_apps
 
   start_monitoring:
     cmds:
@@ -82,3 +97,20 @@ tasks:
       DURATION: "{{default 5 .DURATION}}"
     cmds:
       - "{{.SLEEP_CMD}} {{.DURATION}}"
+
+  rm_infra:
+    cmds:
+      - "docker rm -f bookstore-rabbitmq"
+      - "docker rm -f mailhog"
+      - "docker rm -f orders-db"
+      - "docker rm -f catalog-db"
+      - "docker rm -f keycloak"
+      - "docker rm -f notifications-db"
+
+  rm_apps:
+    cmds:
+      - "docker rm -f bookstore-webapp"
+      - "docker rm -f api-gateway"
+      - "docker rm -f order-service"
+      - "docker rm -f catalog-service"
+      - "docker rm -f notification-service"

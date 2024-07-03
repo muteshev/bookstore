@@ -5,20 +5,21 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 
-import dev.zenfluxpro.bookstore.catalog.BaseIntegrationTest;
-import dev.zenfluxpro.bookstore.catalog.domain.ProductDTO;
+import dev.zenfluxpro.bookstore.catalog.AbstractIT;
+import dev.zenfluxpro.bookstore.catalog.domain.Product;
 import io.restassured.http.ContentType;
 import java.math.BigDecimal;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.jdbc.Sql;
 
 @Sql("/test-data.sql")
-public class ProductControllerTest extends BaseIntegrationTest {
+class ProductControllerTest extends AbstractIT {
+
     @Test
-    public void shouldReturnProducts() {
+    void shouldReturnProducts() {
         given().contentType(ContentType.JSON)
                 .when()
-                .get("/api/v1/products")
+                .get("/api/products")
                 .then()
                 .statusCode(200)
                 .body("data", hasSize(10))
@@ -33,20 +34,20 @@ public class ProductControllerTest extends BaseIntegrationTest {
 
     @Test
     void shouldGetProductByCode() {
-        ProductDTO product = given().contentType(ContentType.JSON)
+        Product product = given().contentType(ContentType.JSON)
                 .when()
-                .get("/api/v1/products/{code}", "P100")
+                .get("/api/products/{code}", "P100")
                 .then()
                 .statusCode(200)
                 .assertThat()
                 .extract()
                 .body()
-                .as(ProductDTO.class);
+                .as(Product.class);
 
-        assertThat(product.getCode()).isEqualTo("P100");
-        assertThat(product.getName()).isEqualTo("The Hunger Games");
-        assertThat(product.getDescription()).isEqualTo("Winning will make you famous. Losing means certain death...");
-        assertThat(product.getPrice()).isEqualTo(new BigDecimal("34.0"));
+        assertThat(product.code()).isEqualTo("P100");
+        assertThat(product.name()).isEqualTo("The Hunger Games");
+        assertThat(product.description()).isEqualTo("Winning will make you famous. Losing means certain death...");
+        assertThat(product.price()).isEqualTo(new BigDecimal("34.0"));
     }
 
     @Test
@@ -54,7 +55,7 @@ public class ProductControllerTest extends BaseIntegrationTest {
         String code = "invalid_product_code";
         given().contentType(ContentType.JSON)
                 .when()
-                .get("/api/v1/products/{code}", code)
+                .get("/api/products/{code}", code)
                 .then()
                 .statusCode(404)
                 .body("status", is(404))
