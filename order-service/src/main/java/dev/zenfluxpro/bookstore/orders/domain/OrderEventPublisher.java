@@ -5,18 +5,15 @@ import dev.zenfluxpro.bookstore.orders.domain.models.OrderCancelledEvent;
 import dev.zenfluxpro.bookstore.orders.domain.models.OrderCreatedEvent;
 import dev.zenfluxpro.bookstore.orders.domain.models.OrderDeliveredEvent;
 import dev.zenfluxpro.bookstore.orders.domain.models.OrderErrorEvent;
+import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 class OrderEventPublisher {
     private final RabbitTemplate rabbitTemplate;
     private final ApplicationProperties properties;
-
-    OrderEventPublisher(RabbitTemplate rabbitTemplate, ApplicationProperties properties) {
-        this.rabbitTemplate = rabbitTemplate;
-        this.properties = properties;
-    }
 
     public void publish(OrderCreatedEvent event) {
         this.send(properties.newOrdersQueue(), event);

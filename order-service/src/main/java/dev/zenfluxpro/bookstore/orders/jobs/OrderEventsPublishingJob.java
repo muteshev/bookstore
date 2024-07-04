@@ -2,22 +2,18 @@ package dev.zenfluxpro.bookstore.orders.jobs;
 
 import dev.zenfluxpro.bookstore.orders.domain.OrderEventService;
 import java.time.Instant;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.javacrumbs.shedlock.core.LockAssert;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
+@Slf4j
 class OrderEventsPublishingJob {
-    private static final Logger log = LoggerFactory.getLogger(OrderEventsPublishingJob.class);
-
     private final OrderEventService orderEventService;
-
-    OrderEventsPublishingJob(OrderEventService orderEventService) {
-        this.orderEventService = orderEventService;
-    }
 
     @Scheduled(cron = "${orders.publish-order-events-job-cron}")
     @SchedulerLock(name = "publishOrderEvents")

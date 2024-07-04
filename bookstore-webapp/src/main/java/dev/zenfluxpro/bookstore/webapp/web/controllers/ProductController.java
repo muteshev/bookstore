@@ -3,8 +3,8 @@ package dev.zenfluxpro.bookstore.webapp.web.controllers;
 import dev.zenfluxpro.bookstore.webapp.clients.catalog.CatalogServiceClient;
 import dev.zenfluxpro.bookstore.webapp.clients.catalog.PagedResult;
 import dev.zenfluxpro.bookstore.webapp.clients.catalog.Product;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,13 +12,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
+@RequiredArgsConstructor
+@Slf4j
 class ProductController {
-    private static final Logger log = LoggerFactory.getLogger(ProductController.class);
     private final CatalogServiceClient catalogService;
-
-    ProductController(CatalogServiceClient catalogService) {
-        this.catalogService = catalogService;
-    }
 
     @GetMapping
     String index() {

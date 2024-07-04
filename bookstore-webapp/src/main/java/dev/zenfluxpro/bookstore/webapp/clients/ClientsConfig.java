@@ -4,6 +4,7 @@ import dev.zenfluxpro.bookstore.webapp.ApplicationProperties;
 import dev.zenfluxpro.bookstore.webapp.clients.catalog.CatalogServiceClient;
 import dev.zenfluxpro.bookstore.webapp.clients.orders.OrderServiceClient;
 import java.time.Duration;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.web.client.ClientHttpRequestFactories;
 import org.springframework.boot.web.client.ClientHttpRequestFactorySettings;
 import org.springframework.boot.web.client.RestClientCustomizer;
@@ -14,12 +15,9 @@ import org.springframework.web.client.support.RestClientAdapter;
 import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 
 @Configuration
+@RequiredArgsConstructor
 class ClientsConfig {
     private final ApplicationProperties properties;
-
-    ClientsConfig(ApplicationProperties properties) {
-        this.properties = properties;
-    }
 
     @Bean
     RestClientCustomizer restClientCustomizer() {

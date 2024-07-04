@@ -5,19 +5,15 @@ import dev.zenfluxpro.bookstore.orders.clients.catalog.ProductServiceClient;
 import dev.zenfluxpro.bookstore.orders.domain.models.CreateOrderRequest;
 import dev.zenfluxpro.bookstore.orders.domain.models.OrderItem;
 import java.util.Set;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
+@Slf4j
 class OrderValidator {
-    private static final Logger log = LoggerFactory.getLogger(OrderValidator.class);
-
     private final ProductServiceClient client;
-
-    OrderValidator(ProductServiceClient client) {
-        this.client = client;
-    }
 
     void validate(CreateOrderRequest request) {
         Set<OrderItem> items = request.items();

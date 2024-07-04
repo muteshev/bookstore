@@ -8,29 +8,20 @@ import dev.zenfluxpro.bookstore.orders.domain.models.OrderDeliveredEvent;
 import dev.zenfluxpro.bookstore.orders.domain.models.OrderErrorEvent;
 import dev.zenfluxpro.bookstore.orders.domain.models.OrderEventType;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class OrderEventService {
-    private static final Logger log = LoggerFactory.getLogger(OrderEventService.class);
-
     private final OrderEventRepository orderEventRepository;
     private final OrderEventPublisher orderEventPublisher;
     private final ObjectMapper objectMapper;
-
-    OrderEventService(
-            OrderEventRepository orderEventRepository,
-            OrderEventPublisher orderEventPublisher,
-            ObjectMapper objectMapper) {
-        this.orderEventRepository = orderEventRepository;
-        this.orderEventPublisher = orderEventPublisher;
-        this.objectMapper = objectMapper;
-    }
 
     void save(OrderCreatedEvent event) {
         OrderEventEntity orderEvent = new OrderEventEntity();

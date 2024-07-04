@@ -2,6 +2,7 @@ package dev.zenfluxpro.bookstore.notifications.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.zenfluxpro.bookstore.notifications.ApplicationProperties;
+import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
@@ -14,12 +15,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+@RequiredArgsConstructor
 class RabbitMQConfig {
     private final ApplicationProperties properties;
-
-    RabbitMQConfig(ApplicationProperties properties) {
-        this.properties = properties;
-    }
 
     @Bean
     DirectExchange exchange() {

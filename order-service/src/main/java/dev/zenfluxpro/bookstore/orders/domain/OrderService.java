@@ -8,29 +8,21 @@ import dev.zenfluxpro.bookstore.orders.domain.models.OrderStatus;
 import dev.zenfluxpro.bookstore.orders.domain.models.OrderSummary;
 import java.util.List;
 import java.util.Optional;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
+@Slf4j
 public class OrderService {
-    private static final Logger log = LoggerFactory.getLogger(OrderService.class);
     private static final List<String> DELIVERY_ALLOWED_COUNTRIES = List.of("INDIA", "USA", "GERMANY", "UK");
 
     private final OrderRepository orderRepository;
     private final dev.zenfluxpro.bookstore.orders.domain.OrderValidator orderValidator;
     private final OrderEventService orderEventService;
-
-    OrderService(
-            OrderRepository orderRepository,
-            dev.zenfluxpro.bookstore.orders.domain.OrderValidator orderValidator,
-            OrderEventService orderEventService) {
-        this.orderRepository = orderRepository;
-        this.orderValidator = orderValidator;
-        this.orderEventService = orderEventService;
-    }
 
     public CreateOrderResponse createOrder(String userName, CreateOrderRequest request) {
         orderValidator.validate(request);

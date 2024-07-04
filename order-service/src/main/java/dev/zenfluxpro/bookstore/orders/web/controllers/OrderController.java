@@ -10,8 +10,8 @@ import dev.zenfluxpro.bookstore.orders.domain.models.OrderSummary;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,16 +24,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/orders")
 @SecurityRequirement(name = "security_auth")
+@RequiredArgsConstructor
+@Slf4j
 class OrderController {
-    private static final Logger log = LoggerFactory.getLogger(OrderController.class);
-
     private final OrderService orderService;
     private final SecurityService securityService;
-
-    OrderController(OrderService orderService, SecurityService securityService) {
-        this.orderService = orderService;
-        this.securityService = securityService;
-    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
