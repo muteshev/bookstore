@@ -14,9 +14,13 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 class SecurityConfig {
 
+    /*
+    http POST localhost:8082/send -- routingKey="new-orders" payload["content"]="order created with Id=123"
+    */
+
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(c -> c.requestMatchers("/actuator/**", "/v3/api-docs/**")
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception { // "/send/**" included only for demo
+        http.authorizeHttpRequests(c -> c.requestMatchers("/actuator/**", "/v3/api-docs/**", "/send/**")
                         .permitAll()
                         .anyRequest()
                         .authenticated())
