@@ -1,0 +1,25 @@
+### Send created order request with json body
+# POST localhost:8082/send -- routingKey="new-orders" payload["content"]="order created with Id=123"
+###
+POST localhost:8082/send
+Content-Type: application/json
+
+{
+  "routingKey": "new-orders",
+  "payload": {
+    "content": "order created with Id=123"
+  }
+}
+
+### Send delivered order request with json body
+# POST localhost:8082/send -- routingKey="delivered-orders" payload["content"]="order with Id=123 has been delivered"
+###
+POST localhost:8082/send
+Content-Type: application/json
+
+{
+  "routingKey": "delivered-orders",
+  "payload": {
+    "content": "order with Id=123 has been delivered"
+  }
+}
